@@ -21,7 +21,7 @@
               class="btn"
               expand="block"
               color="success"
-              v-on:click="salvarPet(pet)"
+              @click="salvarPet(pet)"
               >Salvar</ion-button
             >
           </ion-col>
@@ -36,6 +36,9 @@
             >Idade: {{ petstorage.idade }} anos</ion-card-subtitle
           >
         </ion-card-header>
+        <ion-button color="danger" @click="removePet(pet.id)"
+          >Deletar</ion-button
+        >
       </ion-card>
     </ion-item>
   </ion-page>
@@ -81,6 +84,7 @@ export default defineComponent({
     return {
       pets: [],
       pet: {
+        id: "",
         nome: "",
         idade: "",
       },
@@ -93,6 +97,8 @@ export default defineComponent({
     salvarPet(pet) {
       let pets = localStorage.getItem("petstorage");
 
+      pet.id = new Date().getTime();
+
       if (pets) {
         pets = JSON.parse(pets);
         pets.push(pet);
@@ -102,6 +108,17 @@ export default defineComponent({
       this.pets = pets;
       localStorage.setItem("petstorage", JSON.stringify(pets));
     },
+  
+    removePet(petId) {
+      let pets = localStorage.getItem("petstorage");
+      if (!pets) return;
+      pets = JSON.parse(pets);
+      pets = pets.filter((pet) => {
+        return pet.id != petId;
+      });
+      this.pets = pets;
+      localStorage.setItem("petstorage", JSON.stringify(pets));
+    }
   },
 });
 </script>
