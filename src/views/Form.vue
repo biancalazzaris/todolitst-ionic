@@ -13,16 +13,15 @@
               <ion-label position="floating">Name pet</ion-label>
               <ion-input 
               type="text" 
-              v-model="namePet"></ion-input>
+              v-model="pet.nome"></ion-input>
             </ion-item>
             <ion-item class="item">
               <ion-label position="floating">Age</ion-label>
               <ion-input 
               type="number" 
-              v-model="agePet"></ion-input>
+              v-model="pet.idade"></ion-input>
             </ion-item>
-            <ion-button class="btn" expand="block" color="success" @click="salvarInformacoes">Salvar</ion-button>
-            <h6>Nome: {{ Name }} | Idade: {{ agePet }} </h6>
+            <ion-button class="btn" expand="block" color="success" v-on:click="salvarPet(pet)">Salvar</ion-button>
           </ion-col>
         </div>
       </div>
@@ -30,7 +29,7 @@
   </ion-page>
 </template>
 
-<script lang="ts">
+<script>
 import {
   IonPage,
   IonHeader,
@@ -45,7 +44,6 @@ import {
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 export default defineComponent({
-  name: "Tab2",
   components: {
     IonHeader,
     IonToolbar,
@@ -59,31 +57,38 @@ export default defineComponent({
     IonButton,
   },
   methods: {
-    salvarInformacoes() {
-      const Name = this.namePet;
-      this.Name = Name;
-      const Age = this.agePet;
-      this.Age = Age;
-    },
+      salvarPet(pet){
+          let pets = localStorage.getItem('petstorage');
+
+          if(pets) {
+              pets = JSON.parse(pets);
+              pets.push(pet);
+          }else{
+              pets = [pet];
+          }
+
+          localStorage.setItem('petstorage', JSON.stringify(pets))
+      }
   },
   data() {
     return {
-      namePet: "",
-      Name: "",
-      Age: "",
-      agePet: ""
+        pet: 
+            {
+                nome: '',
+                idade: ''
+            },
     };
   },
 });
 </script>
 
-<style scoped>
 
+ 
+<style scoped>
 .container {
     display: flex;
     justify-content: center;
 }
-
 .btn {
     margin: 30px 20px;
 }
